@@ -1,0 +1,95 @@
+---
+title: "Weather information preferences in the United States"
+subtitle: "Summary report for the `r params$region` Region"
+author: "Author: Christian Ruiz"
+date: "`r format(Sys.Date(), '%A, %B, %d, %Y')`"
+output: html_document
+params:
+  region: 
+    label: "Region:"
+    value: Mountain
+    input: select
+    choices: ["East North Central","East South Central", 
+              "Middle Atlantic","Mountain", "New England", 
+              "Pacific","South Atlantic", "West North Central",
+              "West South Central"]
+
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE }
+knitr::read_chunk("code/setup.R")
+```
+
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
+```
+
+```{r loadData}
+```
+
+
+```{r, child = "text/BackgroundSection.Rmd"}
+
+```
+
+```{r, child = "text/purposeSection.Rmd"}
+
+```
+
+
+## Demographics of Survey Respondents in a Merged Table
+
+This section provides demographic summary tables for the `r nrow(sdat)` survey respondents.
+
+```{r MakeTable, code = readLines("code/makeTable.R") }
+
+```
+
+## Weather Source Preference by Gender
+
+Finally, here is a breakdown of the `r nrow(sdat)` survey respondents for the `r params$region` region of the US on how they check their daily weather by gender.
+
+```{r, code = readLines("code/makeChart.R") }
+
+```
+
+
+```{r}
+
+knitr::read_chunk("code/makeChart.R")
+
+```
+
+
+```{r makeChart}
+
+```
+
+<center><hr>
+![](images/sunstar.png){width=50}
+![](images/sunstar.png){width=50}
+![](images/sunstar.png){width=50}
+![](images/sunstar.png){width=50}
+![](images/sunstar.png){width=50}
+<hr></center>
+
+
+##Additional notes
+R code for the render function
+
+rmarkdown::render("steakArticleParams.Rmd",
+                  params = list(region = "Mountain"))
+                  
+Render 9 reports (one/region) all at once,
+
+R code to use the custom function with purrr
+
+
+library(purrr)
+params_list <- list(list("East North Central",
+                         "East South Central", "Middle Atlantic",
+                         "Mountain", "New England", "Pacific",
+                         "South Atlantic", "West North Central",
+                         "West South Central"))
+purrr::pmap(params_list,render_report)
+
+
